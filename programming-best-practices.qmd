@@ -1,0 +1,139 @@
+# Best practices
+
+## Code readability
+
+*Code readability* refers to how easily a programmer can understand and interpret a piece of code. It is an essential aspect of software development because readable code is easier to maintain, faster to debug, more collaborative, and less prone to errors. Code readability can be broadly categorized into two main aspects: code style and code transparency. *Code style* pertains primarily to the format and presentation of the code. *Code transparency* delves deeper into the logic and structure of the code. It refers to how straightforwardly the functionality, logic, or operations are conveyed.
+
+### Example
+
+Consider the following two examples:
+
+**Poor code readability:**
+
+```{r, eval = FALSE}
+a = sum(dat[dat[,1]>5 & dat[,2]<10,3])
+b = mean(dat[dat[,1]>5 & dat[,2]<10,3])
+print(paste('Sum =',a,', Mean =',b))
+```
+
+**Good code readability:**
+
+```{r, eval = FALSE}
+# Library for data manipulation
+library(dplyr)
+
+# Analysis parameters
+MIN_AGE <- 5
+MAX_SCORE <- 10
+
+# Extract summary performance metrics for subset of observations
+summary_data <- dat |>
+  filter(age >= MIN_AGE & score <= MAX_SCORE) |>
+  summarize(
+    sum_performance = sum(performance_metric),
+    mean_performance = mean(performance_metric)
+  )
+
+# Print the computed results
+cat(sprintf("Sum of Performance: %f | Mean of Performance: %f", 
+            summary_data$sum_performance, 
+            summary_data$mean_performance))
+```
+
+In this section, we will discuss how to write code like that in the second snippet above.
+
+### Code style
+
+Code should adhere to the [tidyverse style guide](https://style.tidyverse.org/index.html), which includes guidance on the following aspects of code:
+
+-   Naming conventions
+-   Spacing and indentation
+-   Commenting
+
+You can use the [`styler`](https://styler.r-lib.org/) package to automatically conform your spacing and indentation to the tidyverse style guide.
+
+## Code transparency
+
+To write transparent code, follow these guidelines:
+
+-   Use tidyverse paradigms as much as possible (e.g. `dplyr` summaries instead of apply operations)
+
+-   Use names, rather than indices, for subsetting (e.g. `results["mse", "lasso"]` versus `results[2,4]`)
+
+-   Use named arguments in function calls, especially with more than one argument (e.g. `rbinom(3, 1, 0.5)` versus `rbinom(n = 3, size = 1, prob = 0.5)`)
+
+-   Put logically related chunks of code together into code blocks, with a comment describing the thrust of that code block.
+
+-   Name constants in your scripts. "Magic numbers" are unexplained numbers in your scripts:
+
+    ```{r eval=FALSE}
+    # Bad practice: Magic number
+    if (x > 30) ...
+
+    # Good practice: Using a named constant
+    MAX_AGE <- 30
+    if (x > MAX_AGE) ...
+    ```
+
+    Descriptive constant names provide clarity. Furthermore, especially if these constants are used in multiple places throughout your script, updating them becomes as simple as changing one line of code. It is also advisable to put all such constants together, near the top of the script.
+
+## Modularity
+
+Avoid repetitive code. Repetition not only lengthens your script but also increases the chance for mistakes.
+
+```{r eval=FALSE}
+# Bad practice: Repetitive code
+data$age[data$age < 0] <- NA
+data$score[data$score < 0] <- NA
+
+# Good practice: Create a function
+replace_negatives_with_NA <- function(variable) {
+  variable[variable < 0] <- NA
+  return(variable)
+}
+
+data$age <- replace_negatives_with_NA(data$age)
+data$score <- replace_negatives_with_NA(data$score)
+```
+
+## Code speed
+
+When optimizing the execution speed of your code, it's essential to strike a balance between code readability and efficiency. However, as Donald Knuth famously stated, 'premature optimization is the root of all evil.' Focus on writing clean and functional code first. Once your code works correctly, you can then consider optimizing the most computationally intensive parts if necessary.
+
+### Vectorization
+
+R is a vectorized language, which means that operations can be performed on entire vectors rather than looping over individual elements. For example, instead of using a loop to square each element of a vector, you can simply square the vector directly:
+
+```{r, eval = FALSE}
+numbers <- c(1, 2, 3, 4, 5)
+
+# Non-vectorized operation using a loop
+squared_numbers <- vector("numeric", length(numbers))
+for (i in seq_along(numbers)) {
+  squared_numbers[i] <- numbers[i]^2
+}
+
+# Example of vectorized operation
+squared_numbers <- numbers^2
+```
+
+### Factoring code out of loops
+
+Often, parts of the code inside a loop don't depend on the loop variable and can be taken outside the loop, leading to efficiency gains. For example, if you're repeatedly computing something within a loop that doesn't change, compute it once outside the loop.
+
+```{r, eval = FALSE}
+# Inefficient loop: Compute mean of the entire dataset in each iteration
+for (i in 1:n_bootstrap) {
+  sample <- sample(data_points, size = length(data_points), replace = TRUE)
+  mu_data <- mean(data_points) # This is unnecessary in the loop
+  bootstrap_means[i] <- mean(sample) - mu_data
+}
+
+# Optimized loop: Factor out the mean computation of the dataset
+bootstrap_means_optimized <- numeric(n_bootstrap)
+mu_data <- mean(data_points)
+for (i in 1:n_bootstrap) {
+  sample <- sample(data_points, size = length(data_points), replace = TRUE)
+  bootstrap_means[i] <- mean(sample) - mu_data
+}
+```

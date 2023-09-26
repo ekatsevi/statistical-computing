@@ -1,0 +1,40 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Statistical Computing and Communication"
+  author: "Eugene Katsevich"
+  chapters:
+    - index.qmd
+    - guiding-principles.qmd
+    - part: fundamental-skills.qmd
+      chapters:
+        - r-programming-basics.qmd
+        - tidyverse.qmd
+        - linux-basics.qmd
+        - version-control.qmd
+    - part: project-organization.qmd
+      chapters:
+        - directories.qmd
+        - real-data.qmd
+    - part: r-programming.qmd
+      chapters:
+        - programming-best-practices.qmd
+        - r-scripting.qmd
+        - r-packages.qmd
+    - part: hpc.qmd
+      chapters: 
+        - hpc-basics.qmd
+        - numerical-simulations.qmd
+    - part: communication.qmd
+      chapters:
+        - figures.qmd
+        - reports.qmd
+        - manuscripts.qmd
+  appendices:
+    - local-setup.qmd
+    - hpc-setup.qmd
+format:
+  html:
+    theme: cosmo

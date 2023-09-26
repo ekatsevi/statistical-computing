@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Statistical Computing and Communication - 11&nbsp; HPC basics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./numerical-simulations.html" rel="next">
+<link href="./hpc.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hpc.html">High-performance computing</a></li><li class="breadcrumb-item"><a href="./hpc-basics.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">HPC basics</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Statistical Computing and Communication</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./guiding-principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Guiding principles</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./fundamental-skills.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamental Skills</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-programming-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R programming</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tidyverse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./linux-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linux basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./version-control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Version control</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./project-organization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Project organization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./directories.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Directories</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./real-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Real data</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./r-programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R programming</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./programming-best-practices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Best practices</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-scripting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Writing R scripts</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Writing R packages</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./hpc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">High-performance computing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hpc-basics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">HPC basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./numerical-simulations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Numerical simulations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./communication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Communication</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Figures</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reports.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Reports</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./manuscripts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Manuscripts</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./local-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Local setup</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hpc-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">HPC setup</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-anatomy-of-an-hpc-cluster" id="toc-the-anatomy-of-an-hpc-cluster" class="nav-link active" data-scroll-target="#the-anatomy-of-an-hpc-cluster"><span class="header-section-number">11.1</span> The anatomy of an HPC cluster</a>
+  <ul class="collapse">
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware"><span class="header-section-number">11.1.1</span> Hardware</a></li>
+  <li><a href="#software" id="toc-software" class="nav-link" data-scroll-target="#software"><span class="header-section-number">11.1.2</span> Software</a></li>
+  </ul></li>
+  <li><a href="#logging-onto-a-cluster" id="toc-logging-onto-a-cluster" class="nav-link" data-scroll-target="#logging-onto-a-cluster"><span class="header-section-number">11.2</span> Logging onto a cluster</a></li>
+  <li><a href="#two-modes-of-interacting-with-an-hpc-cluster" id="toc-two-modes-of-interacting-with-an-hpc-cluster" class="nav-link" data-scroll-target="#two-modes-of-interacting-with-an-hpc-cluster"><span class="header-section-number">11.3</span> Two modes of interacting with an HPC cluster</a></li>
+  <li><a href="#sec-using-scheduler" id="toc-sec-using-scheduler" class="nav-link" data-scroll-target="#sec-using-scheduler"><span class="header-section-number">11.4</span> Requesting resources via the scheduler</a></li>
+  <li><a href="#example-batch-submission-script" id="toc-example-batch-submission-script" class="nav-link" data-scroll-target="#example-batch-submission-script"><span class="header-section-number">11.5</span> Example batch submission script</a></li>
+  <li><a href="#monitoring-the-progress-of-batch-jobs" id="toc-monitoring-the-progress-of-batch-jobs" class="nav-link" data-scroll-target="#monitoring-the-progress-of-batch-jobs"><span class="header-section-number">11.6</span> Monitoring the progress of batch jobs</a></li>
+  <li><a href="#debugging-errors-in-batch-jobs" id="toc-debugging-errors-in-batch-jobs" class="nav-link" data-scroll-target="#debugging-errors-in-batch-jobs"><span class="header-section-number">11.7</span> Debugging errors in batch jobs</a>
+  <ul class="collapse">
+  <li><a href="#bug-in-your-code" id="toc-bug-in-your-code" class="nav-link" data-scroll-target="#bug-in-your-code"><span class="header-section-number">11.7.1</span> Bug in your code</a></li>
+  <li><a href="#inadequate-resource-request" id="toc-inadequate-resource-request" class="nav-link" data-scroll-target="#inadequate-resource-request"><span class="header-section-number">11.7.2</span> Inadequate resource request</a></li>
+  </ul></li>
+  <li><a href="#merging-results-and-exporting-them-to-your-computer" id="toc-merging-results-and-exporting-them-to-your-computer" class="nav-link" data-scroll-target="#merging-results-and-exporting-them-to-your-computer"><span class="header-section-number">11.8</span> Merging results and exporting them to your computer</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">HPC basics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="the-anatomy-of-an-hpc-cluster" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="the-anatomy-of-an-hpc-cluster"><span class="header-section-number">11.1</span> The anatomy of an HPC cluster</h2>
+<section id="hardware" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="hardware"><span class="header-section-number">11.1.1</span> Hardware</h3>
+<p>A high-performance computer cluster is a large collection of computers sharing a file system (<a href="#fig-hpc-schematic">Figure&nbsp;<span>11.1</span></a>). Each computer is called a <em>node</em>, and these nodes are divided into two groups: <em>login nodes</em> and <em>compute nodes</em>. Login nodes are like a lobby area for the HPC; they are where you end up when you first enter. There are usually just a few login nodes. The vast majority of the nodes in an HPC are <em>compute nodes</em>; they are the workhorses of the HPC. Each compute node has some number of processors, or <em>cores</em> (e.g.&nbsp;16) as well as some amount of RAM shared among those cores (e.g.&nbsp;128 GB).</p>
+<div id="fig-hpc-schematic" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="figures/hpc-schematic.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;11.1: High-performance computing setup (<a href="https://www.osc.edu/book/export/html/2782">source</a>)</figcaption>
+</figure>
+</div>
+</section>
+<section id="software" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="software"><span class="header-section-number">11.1.2</span> Software</h3>
+<p>Typically, HPC clusters come with several version of a number of standard softwares pre-installed for all users. Users can build up their computing environment by loading <em>modules</em> corresponding to specific versions of specific softwares (e.g.&nbsp;<code>R/4.3.1</code>). The command <code>module avail</code> lists all available modules that can be loaded by the user, while <code>module load &lt;module_name&gt;</code> loads the specified module. The module system provides a convenient way to dynamically modify a user’s environment to include the necessary executables, libraries, and other resources required by a software package. This approach allows multiple versions of software to coexist on the cluster and enables users to switch between them as needed, facilitating reproducibility and flexibility in using various software tools and libraries on HPC clusters.</p>
+</section>
+</section>
+<section id="logging-onto-a-cluster" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="logging-onto-a-cluster"><span class="header-section-number">11.2</span> Logging onto a cluster</h2>
+<p>Logging onto a cluster can be done either via the Terminal or via a remote desktop. I will focus on the former approach. To log into a cluster via the Terminal, one typically uses <code>ssh</code>, e.g.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ekatsevi@hpc3.wharton.upenn.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Usually, you will be required to enter a password at this stage. However, I recommend <a href="./hpc-setup.html#sec-passwordless-hpc-access">setting up SSH keys</a> in order to avoid entering your password each time you log onto the cluster. Upon gaining access, you will land in a login node.</p>
+</section>
+<section id="two-modes-of-interacting-with-an-hpc-cluster" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="two-modes-of-interacting-with-an-hpc-cluster"><span class="header-section-number">11.3</span> Two modes of interacting with an HPC cluster</h2>
+<p>There are two modes of interacting with an HPC cluster: <em>interactive jobs</em> and <em>batch jobs</em>.</p>
+<ul>
+<li><p>An <strong>interactive job</strong> entails directly entering a compute node and running computer programs from there. (It may be tempting to start computing directly in a login node, but this is strongly discouraged.) Interactive jobs are useful for initial exploration and debugging but not for more serious computations. Indeed, interactive jobs do not give you access to multiple compute nodes and whatever computations you start will be interrupted if you lose connection with the cluster.</p></li>
+<li><p>A <strong>batch job</strong> is a computing job that you “send to the cluster” for completion.The power of batch jobs is that you can submit many at a time in order to take advantage of the large number of computers in the cluster. Furthermore, once you submit a batch job, you need not be logged into the cluster for the job to finish running. Typically, batch jobs are submitted en masse via a <em>submission script</em>.</p></li>
+</ul>
+</section>
+<section id="sec-using-scheduler" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="sec-using-scheduler"><span class="header-section-number">11.4</span> Requesting resources via the scheduler</h2>
+<p>Whether you would like to run an interactive job or a batch job, you need to request resources (the number of cores, the amount of computing time, and the amount of memory) from the <em>scheduler</em>, a software running on the HPC that allocates shared resources among its users. Below is an example of how a scheduler may allocate resources to several jobs.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/scheduler-schematic.png" class="img-fluid figure-img" width="465"></p>
+<figcaption class="figure-caption">Scheduling multiple jobs with different resource requirements (<a href="https://hpc-wiki.info/hpc/Scheduling_Basics">source</a>)</figcaption>
+</figure>
+</div>
+<p>Jobs can be scheduled based on various algorithms, which take into account their resource requests and their order in which they are submitted. Any submitted job lands in the <em>queue</em>, where it waits until there are available resources to run. Many HPC clusters have multiple queues for different kinds of jobs. For example, there may be separate queues for jobs with particularly short or long requested runtimes, or for jobs with particularly small or large requested memory allocations.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/job-queue.png" class="img-fluid figure-img" width="674"></p>
+<figcaption class="figure-caption">Each submitted job lands in the queue prior to execution (<a href="https://hpc-wiki.info/hpc/Scheduling_Basics">source</a>)</figcaption>
+</figure>
+</div>
+<p>There are several different schedulers in use by HPC clusters, two of the most common being Sun Grid Engine (SGE) and Simple Linux Utility for Resource Management (SLURM). These different schedulers have different syntax for tasks like submitting jobs, viewing the job queue, etc.</p>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 41%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>SGE Command</th>
+<th>SLURM Command</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Submit interactive job</td>
+<td><code>qrsh</code></td>
+<td><code>srun</code></td>
+</tr>
+<tr class="even">
+<td>Submit batch job</td>
+<td><code>qsub &lt;script&gt;</code></td>
+<td><code>sbatch &lt;script&gt;</code></td>
+</tr>
+<tr class="odd">
+<td>Resource request flags</td>
+<td><code>-l h_rt=01:00:00 -l h_vmem=1G</code></td>
+<td><code>--time=01:00:00 --mem=1G</code></td>
+</tr>
+<tr class="even">
+<td>Delete a job</td>
+<td><code>qdel &lt;job_id&gt;</code></td>
+<td><code>scancel &lt;job_id&gt;</code></td>
+</tr>
+<tr class="odd">
+<td>View job status</td>
+<td><code>qstat</code></td>
+<td><code>squeue</code></td>
+</tr>
+<tr class="even">
+<td>Job accounting</td>
+<td><code>qacct</code></td>
+<td><code>sacct</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-batch-submission-script" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="example-batch-submission-script"><span class="header-section-number">11.5</span> Example batch submission script</h2>
+<p>To illustrate more concretely how one might submit multiple batch jobs to the scheduler, suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>run_sim.sh</code>, whose job is to set up the computing environment and then call <code>run_sim.R</code> with the given parameter:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>run_sim.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># read command-line argument</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">param</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># load requisite modules</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load R/4.3.1</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># call run_sim.R with specified parameter</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> run_sim.R <span class="va">$param</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, you would create a bash script called <code>submit_jobs.sh</code>, which submits a special kind of job called an <em>array job</em>. Technically this is just one job, but it consists of many <em>tasks</em>, one for each simulation setting (specified by the environment variable <code>SGE_TASK_ID</code> provided by the scheduler, in the case of SGE). This is conceptually similar to, but more efficient than looping over all the parameter values and submitting a batch job for each.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>submit_jobs.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -N my_simulation             # Specify job name</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -j y                         # Merge standard output and standard error</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_rt=01:00:00             # Request 1 hour of runtime</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_vmem=1G                 # Request 1 GB of virtual memory per slot</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -t 1-100                     # Specify the task range for the array job</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameter setting for this task via scheduler's $SGE_TASK_ID</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">parameter_value</span><span class="op">=</span><span class="va">$SGE_TASK_ID</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the simulation with the specific parameter value</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> run_sim.sh <span class="va">$parameter_value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we would submit this array job to the scheduler (in this case, SGE) via</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qsub</span> submit_jobs.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="monitoring-the-progress-of-batch-jobs" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="monitoring-the-progress-of-batch-jobs"><span class="header-section-number">11.6</span> Monitoring the progress of batch jobs</h2>
+<p>You can monitor the progress of your batch jobs (or tasks, for array jobs) by viewing the status of queued or running jobs (via <code>qstat</code> on SGE or <code>squeue</code> on SLURM). These commands will show you how many of these jobs are still waiting in the queue and how many are running. If you wish to monitor the progress of each job (or task) individually, you can use its output file. These output files will usually be named something like <code>&lt;job_name&gt;.o&lt;job_id&gt;.&lt;task_id&gt;</code>, and will appear by default in the same directory as your submission script. If your code (in this case, <code>run_sim.R</code>) prints statements about its progress, then these will show up in the output file corresponding to each job and task.</p>
+</section>
+<section id="debugging-errors-in-batch-jobs" class="level2" data-number="11.7">
+<h2 data-number="11.7" class="anchored" data-anchor-id="debugging-errors-in-batch-jobs"><span class="header-section-number">11.7</span> Debugging errors in batch jobs</h2>
+<p>Errors in your batch jobs will typically be due to one of two reasons: a bug in your code or an inadequate resource request. The former issue is always present, but the latter is HPC-specific.</p>
+<section id="bug-in-your-code" class="level3" data-number="11.7.1">
+<h3 data-number="11.7.1" class="anchored" data-anchor-id="bug-in-your-code"><span class="header-section-number">11.7.1</span> Bug in your code</h3>
+<p>Usually, you would develop and debug your code locally prior to moving it to the cluster. This strategy should help reduce the number of bugs you encounter when running code on the cluster. If you do encounter a bug in your code on the cluster, then you can make note of the job and/or task id and try to reproduce and fix the bug in an interactive session on the cluster. Alternatively, you can go back to your local machine to fix the bug.</p>
+</section>
+<section id="inadequate-resource-request" class="level3" data-number="11.7.2">
+<h3 data-number="11.7.2" class="anchored" data-anchor-id="inadequate-resource-request"><span class="header-section-number">11.7.2</span> Inadequate resource request</h3>
+<p>Suppose you requested an hour for a given batch job (or task) and that job actually needed two hours. In this case, the scheduler unceremoniously kills that job after one hour and prints an error message in the corresponding log file. In addition to inspecting the log file, you can get a better sense for what happened with a killed job via the job accounting feature of the scheduler. For example, on SGE you can type</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qacct</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span> -t <span class="op">&lt;</span>task_id<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>to get a wealth of information about the given job/task. To deal with insufficient memory or time requests, simply restart the job with an increased memory or time request. You may need to run some pilot jobs to get a better sense for how much memory or time your code will need.</p>
+</section>
+</section>
+<section id="merging-results-and-exporting-them-to-your-computer" class="level2" data-number="11.8">
+<h2 data-number="11.8" class="anchored" data-anchor-id="merging-results-and-exporting-them-to-your-computer"><span class="header-section-number">11.8</span> Merging results and exporting them to your computer</h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./hpc.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">High-performance computing</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./numerical-simulations.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Numerical simulations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

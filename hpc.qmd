@@ -1,0 +1,3 @@
+# High-performance computing {.unnumbered}
+
+High-performance computing is a computing paradigm that facilitates parallel computation across hundreds of computers. It is particularly effective for *embarrassingly parallelizable computations*, i.e. computations with many subparts that can be run independently of one another. Many institutions (academic and otherwise) have some sort of high-performance computing environment available for its members to use.

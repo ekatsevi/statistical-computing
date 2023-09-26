@@ -1,0 +1,5 @@
+# R programming {.unnumbered}
+
+When programming, one often wishes to get to the answer as quickly as possible. However, programming quickly jeopardizes the correctness and reproducibility of the code that is written. The following chapters lay out a number of programming best practices to promote the correctness and reproducibility of code, which may take additional time to master at first but which save time in the long run. This document is geared towards R programming, though many of the principles presented here are language-agnostic.
+
+Chapter 8 is for general suggestions, whereas Chapters 9 and 10 are specific to R scripting and R packages, respectively.

@@ -1,0 +1,15 @@
+# HPC setup {.appendix}
+
+## Set up password-less access to HPC {#sec-passwordless-hpc-access}
+
+First, [generate an SSH key on your local machine](local-setup.qmd#sec-ssh-keygen). Then, copy your SSH public key from your local machine to the HPC by typing
+
+``` bash
+ssh-copy-id <username>@<hpc-address>
+```
+
+at the Terminal of your local machine and then enter your login credentials. At this point, you should be able to SSH into your HPC without entering your password; try it out by typing
+
+``` bash
+ssh <username>@<hpc-address>
+```

@@ -1,0 +1,41 @@
+# Writing R packages
+
+::: {.callout-warning}
+## Warning
+
+Under construction.
+:::
+
+## Defensive programming
+
+When writing a function, the goal is for the function to either produce the intended output or an informative error message for any given input. Since a wide variety of inputs are possible, *defensive programming* is required to achieve this. Defensive programming in R entails anticipating potential issues, pitfalls, or mistakes in the code and implementing strategies to handle them gracefully.
+
+**Input validation:**
+
+One of the most common tactics in defensive programming is input validation. Before processing, check if the provided inputs are valid or in the expected format. For instance, if a function expects a numeric vector, verify the input type before proceeding.
+
+```{r}
+compute_mean <- function(data_vector) {
+  if (!is.numeric(data_vector)) {
+    stop("The input data_vector must be numeric.")
+  }
+  return(mean(data_vector))
+}
+```
+
+**Use informative error messages:**
+
+When an error condition is detected, provide a clear and informative error message. This not only prevents silent failures but also helps users or developers identify and fix the problem.
+
+```{r}
+safe_divide <- function(numerator, denominator) {
+  if (denominator == 0) {
+    stop("Error: Division by zero is not allowed.")
+  }
+  return(numerator / denominator)
+}
+```
+
+## Further reading
+
+See [R Packages](https://r-pkgs.org/) by Hadley Wickham and Jenny Bryan.

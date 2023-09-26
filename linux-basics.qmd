@@ -1,0 +1,3 @@
+# Linux basics
+
+For a first, brief introduction to Linux, read [this page](https://matt.might.net/articles/basic-unix/) and then [this page](https://matt.might.net/articles/settling-into-unix/). For a somewhat more systematic introduction to the Linux shell, read Part I of [The Linux Command Line: A Complete Introduction](https://www.amazon.com/Linux-Command-Line-Complete-Introduction/dp/1593273894) ([Penn link](https://franklin.library.upenn.edu/catalog/FRANKLIN_9977534693303681)). To build your Linux skills further, read Parts II and III as well.

@@ -1,0 +1,79 @@
+---
+number-depth: 3
+---
+
+# Writing R scripts
+
+## Managing package dependencies
+
+R's rich ecosystem of packages is one of its strengths. However, with the increasing number of packages, managing dependencies becomes essential to ensure the reproducibility and reliability of your code. This section provides some best practices and recommended tools for handling package dependencies.
+
+### Namespace conflicts
+
+When you load multiple packages, there is potential for functions with the same name to clash, leading to ambiguity in your code. This is because different packages can have functions that share the same name.
+
+#### Using `::` for explicit namespaces
+
+One way to deal with such conflicts is by explicitly specifying the package's namespace when calling the function using the `::` syntax. This ensures that the correct function from the desired package is called. For example, if both packages `A` and `B` have a function named `fun()`, and you want to use the function from package `A`, you can do:
+
+```{r, eval = FALSE}
+A::fun()
+```
+
+#### `conflicted` package
+
+Another solution is to use the [`conflicted`](https://conflicted.r-lib.org/) package. When loaded, `conflicted` will prevent you from using any function that has a namespace conflict, prompting you to specify which one you want:
+
+```{r, eval = FALSE}
+library(conflicted)
+conflict_prefer("fun", "A") # Always use fun from package A
+```
+
+### Managing package versions with `renv`
+
+For the sake of reproducibility and easy collaboration, it is essential to track which versions of R packages were used for a given analysis. The [`renv`](https://rstudio.github.io/renv/) package can help by creating isolated, reproducible R environments. Using `renv`, you can snapshot your current package versions, ensuring that others (or yourself in the future) can replicate your environment:
+
+```{r, eval = FALSE}
+# initializing renv
+renv::init()
+```
+
+By doing this, `renv` will create a snapshot of your current package versions and save it in a `renv.lock` file. This file can then be shared, ensuring that the same package versions are used when your code is run elsewhere.
+
+## Code portability
+
+One of the challenges in R programming, especially when sharing your code with others or transferring it between different machines, is ensuring code portability. *Code portability* ensures that your R script or project can be executed seamlessly in different environments without any hitches. Here's how to enhance the portability of your R code:
+
+### Avoid hardcoded paths 
+
+Hardcoding paths, such as `C:/Users/JohnDoe/Documents/mydata.csv`, can break the code when run on a different machine or if files are moved. Instead, always aim to use relative paths or dynamic paths that adjust based on the current directory. This ensures that as long as the directory structure remains consistent, the paths will always be correct.
+
+### Use R Projects 
+
+R Projects, a feature of RStudio, allow you to maintain a consistent working directory regardless of where the project is located on the machine. When you open an R Project, RStudio sets the working directory to the project's root directory. This allows you to use relative paths effectively. To start an R Project, simply choose `File > New Project` in RStudio.
+
+## Automation and reproducibility
+
+To ensure the robustness and reliability of your analyses, strive for automation and reproducibility. This approach ensures your work remains consistent and easily repeatable.
+
+### Automate manual operations
+
+Manual operations, including moving files, creating directories, and saving figures, are inefficient and error-prone. As many operations as possible should be automated instead.
+
+```{r eval=FALSE}
+# Instead of manually downloading a file, use R to do it programmatically:
+download.file(url = "https://example.com/data.csv", destfile = "data/data.csv")
+```
+
+```{r eval=FALSE, include=TRUE}
+# Instead of manually saving figures, use ggsave():
+ggsave("plots/my_plot.png", plot = p)
+```
+
+### Produce results by running entire scripts
+
+All results should be produced by writing scripts and then executing those scripts in their entirety. While pieces of the script can be run manually during development, run the entire script on the data when the time comes to actually produce a result.
+
+### Best practices
+
+Lastly, always load required libraries at the top of your R scripts. This not only makes it clear which packages are necessary but also ensures that potential namespace conflicts are identified early on, leading to more predictable and stable code.

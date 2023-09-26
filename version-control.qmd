@@ -1,0 +1,3 @@
+# Version control
+
+Read Chapters 1 and 2 of [Pro Git](https://git-scm.com/book/en/v2).

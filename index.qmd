@@ -1,0 +1,9 @@
+# Welcome {.unnumbered}
+
+This is the website for my notes on **Statistical Computing with R**, which are currently a work in progress.
+
+::: {.callout-warning}
+## Warning
+
+Under construction.
+:::

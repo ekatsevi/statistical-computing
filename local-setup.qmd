@@ -1,0 +1,30 @@
+# Local setup {.appendix}
+
+## Installing R
+
+## Installing RStudio
+
+## Installing Visual Studio Code
+
+## Installing WSL2 for Windows users
+
+## Generate an SSH key {#sec-ssh-keygen}
+
+Check whether you already have an SSH key by typing `ls ~/.ssh` at the command line and seeing whether are files named `id_ed25519` and `id_ed25519.pub`. If not, generate an SSH key by typing
+
+``` bash
+ssh-keygen -t ed25519 -C "your_email@example.com" 
+```
+
+at the command line. Press enter when prompted with Enter file in which to save the key to choose the default, and then type a passphrase when prompted with `Enter passphrase (empty for no passphrase)`. Alternately, do not type a passphrase by simply pressing enter twice.
+
+If you are on MacOS, create a file called `config` in the directory `~/.ssh` with the contents
+
+``` bash
+Host *
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+```
+
+The purpose of this step is to have the MacOS keychain store your SSH key passphrase.

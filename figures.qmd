@@ -1,0 +1,7 @@
+# Figures
+
+::: {.callout-warning}
+## Warning
+
+Under construction.
+:::

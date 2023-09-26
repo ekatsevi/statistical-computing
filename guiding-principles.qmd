@@ -1,0 +1,13 @@
+# Guiding principles
+
+## Reproducibility
+
+## Organization
+
+## Automation
+
+## Portability
+
+## Synchronization
+
+## Scalability
