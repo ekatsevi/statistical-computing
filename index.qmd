@@ -1,6 +1,6 @@
 # Welcome {.unnumbered}
 
-This is the website for my notes on **Statistical Computing with R**, which are currently a work in progress.
+This is the website for my notes on **Statistical Computing and Communication**, which are currently a work in progress.
 
 ::: {.callout-warning}
 ## Warning
