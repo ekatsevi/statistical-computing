@@ -53,22 +53,7 @@ There are several different schedulers in use by HPC clusters, two of the most c
 
 ## Example batch submission script
 
-To illustrate more concretely how one might submit multiple batch jobs to the scheduler, suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, ..., 100). To do so, you would first create an R script called `run_sim.R`, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called `run_sim.sh`, whose job is to set up the computing environment and then call `run_sim.R` with the given parameter:
-
-``` {.bash filename="run_sim.sh"}
-#!/bin/bash
-
-# read command-line argument
-param=$1
-
-# load requisite modules
-module load R/4.3.1
-
-# call run_sim.R with specified parameter
-Rscript run_sim.R $param
-```
-
-Then, you would create a bash script called `submit_jobs.sh`, which submits a special kind of job called an *array job*. Technically this is just one job, but it consists of many *tasks*, one for each simulation setting (specified by the environment variable `SGE_TASK_ID` provided by the scheduler, in the case of SGE). This is conceptually similar to, but more efficient than looping over all the parameter values and submitting a batch job for each.
+To illustrate more concretely how one might submit multiple batch jobs to the scheduler, suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, ..., 100). To do so, you would first create an R script called `run_sim.R`, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called `submit_jobs.sh`, sets up the computing environment by loading modules, then loops over the parameter values and calls `run_sim.R` for each one. This can be accomplished by a special kind of job called an *array job*. Technically this is just one job, but it consists of many *tasks*, one for each simulation setting (specified by the environment variable `SGE_TASK_ID` provided by the scheduler, in the case of SGE). This is conceptually similar to, but more efficient than looping over all the parameter values and submitting a batch job for each.
 
 ``` {.bash filename="submit_jobs.sh"}
 #!/bin/bash
@@ -79,11 +64,14 @@ Then, you would create a bash script called `submit_jobs.sh`, which submits a sp
 #$ -l h_vmem=1G                 # Request 1 GB of virtual memory per slot
 #$ -t 1-100                     # Specify the task range for the array job
 
+# load requisite modules
+module load R/4.3.1
+
 # Calculate parameter setting for this task via scheduler's $SGE_TASK_ID
 parameter_value=$SGE_TASK_ID
 
 # Run the simulation with the specific parameter value
-bash run_sim.sh $parameter_value
+Rscript run_sim.R $param
 ```
 
 Finally, we would submit this array job to the scheduler (in this case, SGE) via
@@ -114,4 +102,12 @@ qacct -j <job_id> -t <task_id>
 
 to get a wealth of information about the given job/task. To deal with insufficient memory or time requests, simply restart the job with an increased memory or time request. You may need to run some pilot jobs to get a better sense for how much memory or time your code will need.
 
-## Merging results and exporting them to your computer
+## HPC workflow
+
+Typically, the HPC workflow involves the following steps:
+
+1.  **Develop and debug code locally.** Write an R script (e.g. `run_sim.R`) that carries out one of your parallel computations. Test it locally on individual parameter values by running `Rscript run_sim.R <param-value>` from the Terminal. Write a submission script (like `submit_jobs.sh`) that calls your R script. Write a script that collects the results from individual jobs into a single file. Commit these scripts using Git, and push to GitHub.
+2.  **Run the code in parallel on the cluster.** Get your code onto the cluster by pulling it from GitHub. Then, run your submission script. Monitor your jobs and troubleshoot any errors that arise.
+3.  **Combine the results from individual jobs into a single file.** Once the parallel jobs are complete, run your script to collect the results.
+4.  **Get the results back onto your local machine.** The easiest way to move the results back to your computer is to commit them and push them to GitHub, and then to pull them onto your computer. This strategy works if the results file is under 100 MB, which is GitHub's limit. Otherwise, you can use `rsync`.
+5.  **Explore the results on your local machine.** Once the results are on your computer, you can explore them as usual.

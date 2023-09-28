@@ -332,7 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#bug-in-your-code" id="toc-bug-in-your-code" class="nav-link" data-scroll-target="#bug-in-your-code"><span class="header-section-number">11.7.1</span> Bug in your code</a></li>
   <li><a href="#inadequate-resource-request" id="toc-inadequate-resource-request" class="nav-link" data-scroll-target="#inadequate-resource-request"><span class="header-section-number">11.7.2</span> Inadequate resource request</a></li>
   </ul></li>
-  <li><a href="#merging-results-and-exporting-them-to-your-computer" id="toc-merging-results-and-exporting-them-to-your-computer" class="nav-link" data-scroll-target="#merging-results-and-exporting-them-to-your-computer"><span class="header-section-number">11.8</span> Merging results and exporting them to your computer</a></li>
+  <li><a href="#hpc-workflow" id="toc-hpc-workflow" class="nav-link" data-scroll-target="#hpc-workflow"><span class="header-section-number">11.8</span> HPC workflow</a></li>
   </ul>
 </nav>
     </div>
@@ -453,43 +453,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="example-batch-submission-script" class="level2" data-number="11.5">
 <h2 data-number="11.5" class="anchored" data-anchor-id="example-batch-submission-script"><span class="header-section-number">11.5</span> Example batch submission script</h2>
-<p>To illustrate more concretely how one might submit multiple batch jobs to the scheduler, suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>run_sim.sh</code>, whose job is to set up the computing environment and then call <code>run_sim.R</code> with the given parameter:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>run_sim.sh</strong></pre>
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># read command-line argument</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">param</span><span class="op">=</span><span class="va">$1</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># load requisite modules</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load R/4.3.1</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># call run_sim.R with specified parameter</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> run_sim.R <span class="va">$param</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Then, you would create a bash script called <code>submit_jobs.sh</code>, which submits a special kind of job called an <em>array job</em>. Technically this is just one job, but it consists of many <em>tasks</em>, one for each simulation setting (specified by the environment variable <code>SGE_TASK_ID</code> provided by the scheduler, in the case of SGE). This is conceptually similar to, but more efficient than looping over all the parameter values and submitting a batch job for each.</p>
+<p>To illustrate more concretely how one might submit multiple batch jobs to the scheduler, suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>submit_jobs.sh</code>, sets up the computing environment by loading modules, then loops over the parameter values and calls <code>run_sim.R</code> for each one. This can be accomplished by a special kind of job called an <em>array job</em>. Technically this is just one job, but it consists of many <em>tasks</em>, one for each simulation setting (specified by the environment variable <code>SGE_TASK_ID</code> provided by the scheduler, in the case of SGE). This is conceptually similar to, but more efficient than looping over all the parameter values and submitting a batch job for each.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>submit_jobs.sh</strong></pre>
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -N my_simulation             # Specify job name</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -j y                         # Merge standard output and standard error</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_rt=01:00:00             # Request 1 hour of runtime</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_vmem=1G                 # Request 1 GB of virtual memory per slot</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -t 1-100                     # Specify the task range for the array job</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameter setting for this task via scheduler's $SGE_TASK_ID</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">parameter_value</span><span class="op">=</span><span class="va">$SGE_TASK_ID</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the simulation with the specific parameter value</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> run_sim.sh <span class="va">$parameter_value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -N my_simulation             # Specify job name</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -j y                         # Merge standard output and standard error</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_rt=01:00:00             # Request 1 hour of runtime</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_vmem=1G                 # Request 1 GB of virtual memory per slot</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -t 1-100                     # Specify the task range for the array job</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># load requisite modules</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load R/4.3.1</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameter setting for this task via scheduler's $SGE_TASK_ID</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="va">parameter_value</span><span class="op">=</span><span class="va">$SGE_TASK_ID</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the simulation with the specific parameter value</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> run_sim.R <span class="va">$param</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, we would submit this array job to the scheduler (in this case, SGE) via</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qsub</span> submit_jobs.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qsub</span> submit_jobs.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="monitoring-the-progress-of-batch-jobs" class="level2" data-number="11.6">
 <h2 data-number="11.6" class="anchored" data-anchor-id="monitoring-the-progress-of-batch-jobs"><span class="header-section-number">11.6</span> Monitoring the progress of batch jobs</h2>
@@ -505,12 +492,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="inadequate-resource-request" class="level3" data-number="11.7.2">
 <h3 data-number="11.7.2" class="anchored" data-anchor-id="inadequate-resource-request"><span class="header-section-number">11.7.2</span> Inadequate resource request</h3>
 <p>Suppose you requested an hour for a given batch job (or task) and that job actually needed two hours. In this case, the scheduler unceremoniously kills that job after one hour and prints an error message in the corresponding log file. In addition to inspecting the log file, you can get a better sense for what happened with a killed job via the job accounting feature of the scheduler. For example, on SGE you can type</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qacct</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span> -t <span class="op">&lt;</span>task_id<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qacct</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span> -t <span class="op">&lt;</span>task_id<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>to get a wealth of information about the given job/task. To deal with insufficient memory or time requests, simply restart the job with an increased memory or time request. You may need to run some pilot jobs to get a better sense for how much memory or time your code will need.</p>
 </section>
 </section>
-<section id="merging-results-and-exporting-them-to-your-computer" class="level2" data-number="11.8">
-<h2 data-number="11.8" class="anchored" data-anchor-id="merging-results-and-exporting-them-to-your-computer"><span class="header-section-number">11.8</span> Merging results and exporting them to your computer</h2>
+<section id="hpc-workflow" class="level2" data-number="11.8">
+<h2 data-number="11.8" class="anchored" data-anchor-id="hpc-workflow"><span class="header-section-number">11.8</span> HPC workflow</h2>
+<p>Typically, the HPC workflow involves the following steps:</p>
+<ol type="1">
+<li><strong>Develop and debug code locally.</strong> Write an R script (e.g.&nbsp;<code>run_sim.R</code>) that carries out one of your parallel computations. Test it locally on individual parameter values by running <code>Rscript run_sim.R &lt;param-value&gt;</code> from the Terminal. Write a submission script (like <code>submit_jobs.sh</code>) that calls your R script. Write a script that collects the results from individual jobs into a single file. Commit these scripts using Git, and push to GitHub.</li>
+<li><strong>Run the code in parallel on the cluster.</strong> Get your code onto the cluster by pulling it from GitHub. Then, run your submission script. Monitor your jobs and troubleshoot any errors that arise.</li>
+<li><strong>Combine the results from individual jobs into a single file.</strong> Once the parallel jobs are complete, run your script to collect the results.</li>
+<li><strong>Get the results back onto your local machine.</strong> The easiest way to move the results back to your computer is to commit them and push them to GitHub, and then to pull them onto your computer. This strategy works if the results file is under 100 MB, which is GitHub’s limit. Otherwise, you can use <code>rsync</code>.</li>
+<li><strong>Explore the results on your local machine.</strong> Once the results are on your computer, you can explore them as usual.</li>
+</ol>
 
 
 </section>
