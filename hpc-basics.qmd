@@ -163,6 +163,8 @@ Finally, you would submit this array job to the scheduler via
 qsub submit_jobs.sh
 ```
 
+Please see [this GitHub repository](https://github.com/Katsevich-Teaching/hpc-sample/) for an example of using this paradigm to carry out a numerical simulation.
+
 ## SLURM
 
 To submit a batch job, you must first write a submission script. Here, I will illustrate how one would write a submission script for an array job. Suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, ..., 100). To do so, you would first create an R script called `run_sim.R`, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called `submit_jobs.sh`, which specifies the resource requests as well as the code to run for each array task (the array task is specified by the environment variable `SLURM_ARRAY_TASK_ID`.

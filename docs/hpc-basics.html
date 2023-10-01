@@ -559,6 +559,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Finally, you would submit this array job to the scheduler via</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qsub</span> submit_jobs.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Please see <a href="https://github.com/Katsevich-Teaching/hpc-sample/">this GitHub repository</a> for an example of using this paradigm to carry out a numerical simulation.</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>To submit a batch job, you must first write a submission script. Here, I will illustrate how one would write a submission script for an array job. Suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>submit_jobs.sh</code>, which specifies the resource requests as well as the code to run for each array task (the array task is specified by the environment variable <code>SLURM_ARRAY_TASK_ID</code>.</p>
