@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Statistical Computing and Communication - 11&nbsp; HPC basics</title>
+<title>Statistical Computing and Communication - 11&nbsp; High-performance computing basics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -108,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hpc.html">High-performance computing</a></li><li class="breadcrumb-item"><a href="./hpc-basics.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">HPC basics</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hpc.html">High-performance computing</a></li><li class="breadcrumb-item"><a href="./hpc-basics.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">High-performance computing basics</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -244,7 +244,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./hpc-basics.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">HPC basics</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">High-performance computing basics</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -319,20 +319,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#the-anatomy-of-an-hpc-cluster" id="toc-the-anatomy-of-an-hpc-cluster" class="nav-link active" data-scroll-target="#the-anatomy-of-an-hpc-cluster"><span class="header-section-number">11.1</span> The anatomy of an HPC cluster</a>
   <ul class="collapse">
-  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware"><span class="header-section-number">11.1.1</span> Hardware</a></li>
-  <li><a href="#software" id="toc-software" class="nav-link" data-scroll-target="#software"><span class="header-section-number">11.1.2</span> Software</a></li>
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware">Hardware</a></li>
+  <li><a href="#software" id="toc-software" class="nav-link" data-scroll-target="#software">Software</a></li>
   </ul></li>
-  <li><a href="#logging-onto-a-cluster" id="toc-logging-onto-a-cluster" class="nav-link" data-scroll-target="#logging-onto-a-cluster"><span class="header-section-number">11.2</span> Logging onto a cluster</a></li>
-  <li><a href="#two-modes-of-interacting-with-an-hpc-cluster" id="toc-two-modes-of-interacting-with-an-hpc-cluster" class="nav-link" data-scroll-target="#two-modes-of-interacting-with-an-hpc-cluster"><span class="header-section-number">11.3</span> Two modes of interacting with an HPC cluster</a></li>
-  <li><a href="#sec-using-scheduler" id="toc-sec-using-scheduler" class="nav-link" data-scroll-target="#sec-using-scheduler"><span class="header-section-number">11.4</span> Requesting resources via the scheduler</a></li>
-  <li><a href="#example-batch-submission-script" id="toc-example-batch-submission-script" class="nav-link" data-scroll-target="#example-batch-submission-script"><span class="header-section-number">11.5</span> Example batch submission script</a></li>
-  <li><a href="#monitoring-the-progress-of-batch-jobs" id="toc-monitoring-the-progress-of-batch-jobs" class="nav-link" data-scroll-target="#monitoring-the-progress-of-batch-jobs"><span class="header-section-number">11.6</span> Monitoring the progress of batch jobs</a></li>
-  <li><a href="#debugging-errors-in-batch-jobs" id="toc-debugging-errors-in-batch-jobs" class="nav-link" data-scroll-target="#debugging-errors-in-batch-jobs"><span class="header-section-number">11.7</span> Debugging errors in batch jobs</a>
+  <li><a href="#parallel-computing-paradigms" id="toc-parallel-computing-paradigms" class="nav-link" data-scroll-target="#parallel-computing-paradigms"><span class="header-section-number">11.2</span> Parallel computing paradigms</a>
   <ul class="collapse">
-  <li><a href="#bug-in-your-code" id="toc-bug-in-your-code" class="nav-link" data-scroll-target="#bug-in-your-code"><span class="header-section-number">11.7.1</span> Bug in your code</a></li>
-  <li><a href="#inadequate-resource-request" id="toc-inadequate-resource-request" class="nav-link" data-scroll-target="#inadequate-resource-request"><span class="header-section-number">11.7.2</span> Inadequate resource request</a></li>
+  <li><a href="#embarrassingly-parallel-paradigm" id="toc-embarrassingly-parallel-paradigm" class="nav-link" data-scroll-target="#embarrassingly-parallel-paradigm">Embarrassingly parallel paradigm</a></li>
+  <li><a href="#shared-memory-and-graphics-processing-unit-gpu-parallelism" id="toc-shared-memory-and-graphics-processing-unit-gpu-parallelism" class="nav-link" data-scroll-target="#shared-memory-and-graphics-processing-unit-gpu-parallelism">Shared memory and graphics processing unit (GPU) parallelism</a></li>
+  <li><a href="#distributed-memory-parallelism" id="toc-distributed-memory-parallelism" class="nav-link" data-scroll-target="#distributed-memory-parallelism">Distributed memory parallelism</a></li>
   </ul></li>
-  <li><a href="#hpc-workflow" id="toc-hpc-workflow" class="nav-link" data-scroll-target="#hpc-workflow"><span class="header-section-number">11.8</span> HPC workflow</a></li>
+  <li><a href="#hpc-resource-requests-and-job-scheduling" id="toc-hpc-resource-requests-and-job-scheduling" class="nav-link" data-scroll-target="#hpc-resource-requests-and-job-scheduling"><span class="header-section-number">11.3</span> HPC resource requests and job scheduling</a>
+  <ul class="collapse">
+  <li><a href="#two-kinds-of-jobs" id="toc-two-kinds-of-jobs" class="nav-link" data-scroll-target="#two-kinds-of-jobs">Two kinds of jobs</a></li>
+  <li><a href="#resource-requests" id="toc-resource-requests" class="nav-link" data-scroll-target="#resource-requests">Resource requests</a></li>
+  <li><a href="#job-scheduling" id="toc-job-scheduling" class="nav-link" data-scroll-target="#job-scheduling">Job scheduling</a></li>
+  <li><a href="#scheduler-commands" id="toc-scheduler-commands" class="nav-link" data-scroll-target="#scheduler-commands">Scheduler commands</a></li>
+  </ul></li>
+  <li><a href="#interacting-with-hpc-clusters" id="toc-interacting-with-hpc-clusters" class="nav-link" data-scroll-target="#interacting-with-hpc-clusters"><span class="header-section-number">11.4</span> Interacting with HPC clusters</a>
+  <ul class="collapse">
+  <li><a href="#logging-onto-the-cluster" id="toc-logging-onto-the-cluster" class="nav-link" data-scroll-target="#logging-onto-the-cluster">Logging onto the cluster</a></li>
+  <li><a href="#moving-code-and-data-between-your-computer-and-the-cluster" id="toc-moving-code-and-data-between-your-computer-and-the-cluster" class="nav-link" data-scroll-target="#moving-code-and-data-between-your-computer-and-the-cluster">Moving code and data between your computer and the cluster</a></li>
+  <li><a href="#submitting-batch-jobs" id="toc-submitting-batch-jobs" class="nav-link" data-scroll-target="#submitting-batch-jobs">Submitting batch jobs</a></li>
+  <li><a href="#monitoring-the-progress-of-batch-jobs" id="toc-monitoring-the-progress-of-batch-jobs" class="nav-link" data-scroll-target="#monitoring-the-progress-of-batch-jobs">Monitoring the progress of batch jobs</a></li>
+  <li><a href="#debugging-errors-in-batch-jobs" id="toc-debugging-errors-in-batch-jobs" class="nav-link" data-scroll-target="#debugging-errors-in-batch-jobs">Debugging errors in batch jobs</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -341,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">HPC basics</span></h1>
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">High-performance computing basics</span></h1>
 </div>
 
 
@@ -358,57 +368,93 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="the-anatomy-of-an-hpc-cluster" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="the-anatomy-of-an-hpc-cluster"><span class="header-section-number">11.1</span> The anatomy of an HPC cluster</h2>
-<section id="hardware" class="level3" data-number="11.1.1">
-<h3 data-number="11.1.1" class="anchored" data-anchor-id="hardware"><span class="header-section-number">11.1.1</span> Hardware</h3>
-<p>A high-performance computer cluster is a large collection of computers sharing a file system (<a href="#fig-hpc-schematic">Figure&nbsp;<span>11.1</span></a>). Each computer is called a <em>node</em>, and these nodes are divided into two groups: <em>login nodes</em> and <em>compute nodes</em>. Login nodes are like a lobby area for the HPC; they are where you end up when you first enter. There are usually just a few login nodes. The vast majority of the nodes in an HPC are <em>compute nodes</em>; they are the workhorses of the HPC. Each compute node has some number of processors, or <em>cores</em> (e.g.&nbsp;16) as well as some amount of RAM shared among those cores (e.g.&nbsp;128 GB).</p>
+<section id="hardware" class="level3">
+<h3 class="anchored" data-anchor-id="hardware">Hardware</h3>
+<section id="overview" class="level4">
+<h4 class="anchored" data-anchor-id="overview">Overview</h4>
+<p>A high-performance computer cluster is a large collection of computers connected by a <em>network</em> to each other and to a common <em>disk storage</em> equipped with a <em>parallel distributed file system</em> (<a href="#fig-hpc-schematic">Figure&nbsp;<span>11.1</span></a>). Each computer is called a <em>node</em>, and these nodes are divided into two groups: <em>login nodes</em> and <em>compute nodes</em>. Login nodes are like a lobby area for the HPC; they are where you end up when you first enter. There are usually just a few login nodes. The vast majority of the nodes in an HPC are <em>compute nodes</em>; they are the workhorses of the HPC. Each compute node has some number of <em>cores</em> (e.g.&nbsp;16) as well as some amount of <em>memory</em> shared among those cores (e.g.&nbsp;128 GB).</p>
 <div id="fig-hpc-schematic" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="figures/hpc-schematic.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;11.1: High-performance computing setup (<a href="https://www.osc.edu/book/export/html/2782">source</a>)</figcaption>
+<p><img src="figures/hpc-schematic.jpg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;11.1: High-performance computing architecture</figcaption>
 </figure>
 </div>
 </section>
-<section id="software" class="level3" data-number="11.1.2">
-<h3 data-number="11.1.2" class="anchored" data-anchor-id="software"><span class="header-section-number">11.1.2</span> Software</h3>
+<section id="components" class="level4">
+<h4 class="anchored" data-anchor-id="components">Components</h4>
+<ul>
+<li><p><strong>Disk storage</strong>: Disk storage refers to devices that hold vast amounts of data persistently, even when power is switched off. Disk storage houses the file system of the HPC cluster.</p></li>
+<li><p><strong>Parallel distributed file system</strong>: A parallel distributed filesystem is designed to store and manage data across a multitude of machines concurrently, allowing multiple computers to read and write data in parallel.</p></li>
+<li><p><strong>Network</strong>: A network is a system of high-speed connections linking together computational nodes and storage systems.</p></li>
+<li><p><strong>Node</strong>: A node is a single computational unit within a cluster. Each node contains one or more CPUs and memory. An HPC cluster can consist of a few to thousands of nodes, working together to execute large-scale computational tasks.</p></li>
+<li><p><strong>CPU (Central Processing Unit)</strong>: The CPU is the primary computational engine of an HPC node. It executes the instructions of a computer program and interacts with other system components. CPUs typically have multiple cores, allowing them to process several tasks simultaneously.</p></li>
+<li><p><strong>Core</strong>: A core is an individual processing unit within a CPU. Each core can independently execute instructions, so computational parallelization on HPC clusters typically occurs at the core level.</p></li>
+<li><p><strong>Memory/RAM (Random-Access Memory)</strong>: RAM is the primary storage medium that the CPU uses to store and retrieve data during computations. It offers fast read and write access. Each node has its own RAM, which is shared among the cores on that node.</p></li>
+</ul>
+</section>
+</section>
+<section id="software" class="level3">
+<h3 class="anchored" data-anchor-id="software">Software</h3>
 <p>Typically, HPC clusters come with several version of a number of standard softwares pre-installed for all users. Users can build up their computing environment by loading <em>modules</em> corresponding to specific versions of specific softwares (e.g.&nbsp;<code>R/4.3.1</code>). The command <code>module avail</code> lists all available modules that can be loaded by the user, while <code>module load &lt;module_name&gt;</code> loads the specified module. The module system provides a convenient way to dynamically modify a user’s environment to include the necessary executables, libraries, and other resources required by a software package. This approach allows multiple versions of software to coexist on the cluster and enables users to switch between them as needed, facilitating reproducibility and flexibility in using various software tools and libraries on HPC clusters.</p>
 </section>
 </section>
-<section id="logging-onto-a-cluster" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="logging-onto-a-cluster"><span class="header-section-number">11.2</span> Logging onto a cluster</h2>
-<p>Logging onto a cluster can be done either via the Terminal or via a remote desktop. I will focus on the former approach. To log into a cluster via the Terminal, one typically uses <code>ssh</code>, e.g.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ekatsevi@hpc3.wharton.upenn.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Usually, you will be required to enter a password at this stage. However, I recommend <a href="./hpc-setup.html#sec-passwordless-hpc-access">setting up SSH keys</a> in order to avoid entering your password each time you log onto the cluster. Upon gaining access, you will land in a login node.</p>
+<section id="parallel-computing-paradigms" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="parallel-computing-paradigms"><span class="header-section-number">11.2</span> Parallel computing paradigms</h2>
+<p>Parallel processing on HPC clusters allows multiple tasks to be carried out simultaneously. In this context, a “task” is a unit of computation. These tasks can be independent pieces of work, stages in a larger operation, or simultaneous computations on different data subsets. There are several parallel computing paradigms that differ based on how tasks communicate and share data. The main such paradigms are listed below, roughly in increasing order of complexity.</p>
+<section id="embarrassingly-parallel-paradigm" class="level3">
+<h3 class="anchored" data-anchor-id="embarrassingly-parallel-paradigm">Embarrassingly parallel paradigm</h3>
+<p>This paradigm represents a collection of tasks where each task is entirely independent and does not need to communicate with other tasks. Because no inter-task communication or synchronization is required, the embarrassingly parallel paradigm is the simplest parallel computing paradigm. Common examples include parameter sweeps and Monte Carlo simulations.</p>
 </section>
-<section id="two-modes-of-interacting-with-an-hpc-cluster" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="two-modes-of-interacting-with-an-hpc-cluster"><span class="header-section-number">11.3</span> Two modes of interacting with an HPC cluster</h2>
-<p>There are two modes of interacting with an HPC cluster: <em>interactive jobs</em> and <em>batch jobs</em>.</p>
+<section id="shared-memory-and-graphics-processing-unit-gpu-parallelism" class="level3">
+<h3 class="anchored" data-anchor-id="shared-memory-and-graphics-processing-unit-gpu-parallelism">Shared memory and graphics processing unit (GPU) parallelism</h3>
+<p>Shared memory parallelism refers to a parallel computing paradigm where multiple cores within a single node access and operate on a single, shared memory space. Shared memory parallelism can leverage multiple cores on a CPU or GPU (graphics processing unit). GPUs are a different kind of processor designed to perform repetitive matrix operations on large datasets efficiently, making them especially adept at tasks like image processing and deep learning Some HPC clusters have a number of GPU nodes in addition to the standard CPU nodes. Programming shared memory parallelism on CPUs usually involves the OpenMP application programming interface, while programming GPUs usually involves the CUDA programming language. Both approaches require careful management of memory hierarchies, thread synchronization, and data access patterns.</p>
+</section>
+<section id="distributed-memory-parallelism" class="level3">
+<h3 class="anchored" data-anchor-id="distributed-memory-parallelism">Distributed memory parallelism</h3>
+<p>In this paradigm, tasks run on cores of separate nodes, each equipped with its own local memory. The primary mode of communication is passing messages across the network between nodes, often facilitated by protocols like the Message Passing Interface (MPI). Distributed memory parallelism requires careful management of data distribution and communication patterns to avoid bottlenecks and ensure efficient parallelization. Common applications of distributed memory parallelism involve big data processing and graph processing.</p>
+</section>
+</section>
+<section id="hpc-resource-requests-and-job-scheduling" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="hpc-resource-requests-and-job-scheduling"><span class="header-section-number">11.3</span> HPC resource requests and job scheduling</h2>
+<p>HPC resources are shared among many users, so each user must request the resources they need for their computations. HPC computations are structured into <em>jobs</em>, which are submitted to a software called a <em>scheduler</em> that manages the allocation of resources to each job.</p>
+<section id="two-kinds-of-jobs" class="level3">
+<h3 class="anchored" data-anchor-id="two-kinds-of-jobs">Two kinds of jobs</h3>
+<p>There are two kinds of jobs on an HPC cluster: <em>interactive jobs</em> and <em>batch jobs</em>.</p>
 <ul>
 <li><p>An <strong>interactive job</strong> entails directly entering a compute node and running computer programs from there. (It may be tempting to start computing directly in a login node, but this is strongly discouraged.) Interactive jobs are useful for initial exploration and debugging but not for more serious computations. Indeed, interactive jobs do not give you access to multiple compute nodes and whatever computations you start will be interrupted if you lose connection with the cluster.</p></li>
-<li><p>A <strong>batch job</strong> is a computing job that you “send to the cluster” for completion.The power of batch jobs is that you can submit many at a time in order to take advantage of the large number of computers in the cluster. Furthermore, once you submit a batch job, you need not be logged into the cluster for the job to finish running. Typically, batch jobs are submitted en masse via a <em>submission script</em>.</p></li>
+<li><p>A <strong>batch job</strong> is a computing job that you “send to the cluster” for completion. Instead of issuing commands manually as in an interactive job, a batch job entails a sequence of commands specified in a <em>submission script</em>. A batch job may involve one or more tasks. For example, an <em>array job</em> is a batch job that consists of multiple <em>array tasks</em>. Array jobs are a typical means to carry out embarrassingly parallel computations. Unlike interactive jobs, batch jobs like array jobs can take advantage of the cluster’s multiple compute nodes. Furthermore, once you submit a batch job, you need not be logged into the cluster for the job to finish running.</p></li>
 </ul>
 </section>
-<section id="sec-using-scheduler" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="sec-using-scheduler"><span class="header-section-number">11.4</span> Requesting resources via the scheduler</h2>
-<p>Whether you would like to run an interactive job or a batch job, you need to request resources (the number of cores, the amount of computing time, and the amount of memory) from the <em>scheduler</em>, a software running on the HPC that allocates shared resources among its users. Below is an example of how a scheduler may allocate resources to several jobs.</p>
+<section id="resource-requests" class="level3">
+<h3 class="anchored" data-anchor-id="resource-requests">Resource requests</h3>
+<p>Whether you would like to run an interactive job or a batch job, you need to request resources from the scheduler. Below are the kinds of resources that are typically requested for interactive and batch jobs.</p>
+<ul>
+<li><strong>Time (per job or per task):</strong> The amount of time you expect your job (or each constituent task) to run, specified in hours, minutes, and seconds.</li>
+<li><strong>Memory (per job or per task):</strong> The amount of memory you expect your job (or each constituent task) to use, often specified in gigabytes (GB).</li>
+<li><strong>Number of cores (per job or per task):</strong> Array jobs often will have multiple tasks, but with just one core per task. Other kinds of batch jobs may have multiple cores per task.</li>
+</ul>
+<p>Each kind of resource typically has a default setting that is used if you do not specify a value. For example, typically one core will be requested per job or per task by default.</p>
+<p>Importantly, jobs or tasks that exceed their requested time or memory limits will be terminated. Thus, it is important to request enough time and memory for your job to complete successfully. However, requesting too much time or memory can be problematic as well, as it may delay the start of your job. Thus, a good strategy is to run a small test job to get a sense of how much time and memory your computations require, add a little bit of wiggle room, and then request that amount of time and memory for your actual job. For example, if your test job takes 10 minutes and uses 1 GB of memory, you might request 15 minutes and 2 GB of memory for your actual job.</p>
+</section>
+<section id="job-scheduling" class="level3">
+<h3 class="anchored" data-anchor-id="job-scheduling">Job scheduling</h3>
+<p>The scheduler manages the allocation of resources to each job. It does so by maintaining a queue of jobs waiting to be executed. When a job is submitted, it is placed in the queue. The scheduler then allocates resources to each job in the queue based on their resource requests and the order in which they are submitted. Below is an example of how a scheduler may allocate compute and memory resources across time to several jobs.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figures/scheduler-schematic.png" class="img-fluid figure-img" width="465"></p>
-<figcaption class="figure-caption">Scheduling multiple jobs with different resource requirements (<a href="https://hpc-wiki.info/hpc/Scheduling_Basics">source</a>)</figcaption>
+<p><img src="figures/job-scheduling-schematic.jpg" class="img-fluid figure-img" width="399"></p>
+<figcaption class="figure-caption">Scheduling multiple jobs with different resource requirements</figcaption>
 </figure>
 </div>
-<p>Jobs can be scheduled based on various algorithms, which take into account their resource requests and their order in which they are submitted. Any submitted job lands in the <em>queue</em>, where it waits until there are available resources to run. Many HPC clusters have multiple queues for different kinds of jobs. For example, there may be separate queues for jobs with particularly short or long requested runtimes, or for jobs with particularly small or large requested memory allocations.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figures/job-queue.png" class="img-fluid figure-img" width="674"></p>
-<figcaption class="figure-caption">Each submitted job lands in the queue prior to execution (<a href="https://hpc-wiki.info/hpc/Scheduling_Basics">source</a>)</figcaption>
-</figure>
-</div>
+<p>The scheduler may also impose limits on the amount of resources that can be requested by a single user at a given time. For example, a scheduler may limit the number of cores that a user can request at a given time to 100. This limit is called a <em>fair-share</em> limit. Many HPC clusters have multiple queues for different kinds of jobs. For example, there may be separate queues for jobs with particularly short or long requested runtimes, or for jobs with particularly small or large requested memory allocations.</p>
+</section>
+<section id="scheduler-commands" class="level3">
+<h3 class="anchored" data-anchor-id="scheduler-commands">Scheduler commands</h3>
 <p>There are several different schedulers in use by HPC clusters, two of the most common being Sun Grid Engine (SGE) and Simple Linux Utility for Resource Management (SLURM). These different schedulers have different syntax for tasks like submitting jobs, viewing the job queue, etc.</p>
 <table class="table">
 <colgroup>
 <col style="width: 25%">
-<col style="width: 41%">
-<col style="width: 33%">
+<col style="width: 43%">
+<col style="width: 31%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -430,7 +476,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td>Resource request flags</td>
-<td><code>-l h_rt=01:00:00 -l h_vmem=1G</code></td>
+<td><code>-l h_rt=01:00:00 -l m_mem_free=1G</code></td>
 <td><code>--time=01:00:00 --mem=1G</code></td>
 </tr>
 <tr class="even">
@@ -450,10 +496,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<p>Note that there is heterogeneity within the syntax used even within SGE or SLURM schedulers; please check your specific cluster’s documentation.</p>
 </section>
-<section id="example-batch-submission-script" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="example-batch-submission-script"><span class="header-section-number">11.5</span> Example batch submission script</h2>
-<p>To illustrate more concretely how one might submit multiple batch jobs to the scheduler, suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>submit_jobs.sh</code>, sets up the computing environment by loading modules, then loops over the parameter values and calls <code>run_sim.R</code> for each one. This can be accomplished by a special kind of job called an <em>array job</em>. Technically this is just one job, but it consists of many <em>tasks</em>, one for each simulation setting (specified by the environment variable <code>SGE_TASK_ID</code> provided by the scheduler, in the case of SGE). This is conceptually similar to, but more efficient than looping over all the parameter values and submitting a batch job for each.</p>
+</section>
+<section id="interacting-with-hpc-clusters" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="interacting-with-hpc-clusters"><span class="header-section-number">11.4</span> Interacting with HPC clusters</h2>
+<p>Typically, the HPC workflow involves the following steps:</p>
+<ol type="1">
+<li>Develop and debug code locally (i.e., on your laptop or desktop computer).</li>
+<li>Move your code (and data, if applicable) onto the cluster.</li>
+<li>Test-run your code on the cluster via an interactive job.</li>
+<li>Submit a batch job to carry out your parallel computations.</li>
+<li>Combine the results from individual jobs into a single file.</li>
+<li>Move the results onto your local machine.</li>
+<li>Explore the results on your local machine.</li>
+</ol>
+<p>The following sections detail some of the steps described above.</p>
+<section id="logging-onto-the-cluster" class="level3">
+<h3 class="anchored" data-anchor-id="logging-onto-the-cluster">Logging onto the cluster</h3>
+<p>Logging onto a cluster can be done either via the Terminal or via a remote desktop. I will focus on the former approach. To log into a cluster via the Terminal, one typically uses <code>ssh</code>, e.g.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> ekatsevi@hpc3.wharton.upenn.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Usually, you will be required to enter a password at this stage. However, I recommend <a href="./hpc-setup.html#sec-passwordless-hpc-access">setting up SSH keys</a> in order to avoid entering your password each time you log onto the cluster. Upon gaining access, you will land in a login node.</p>
+</section>
+<section id="moving-code-and-data-between-your-computer-and-the-cluster" class="level3">
+<h3 class="anchored" data-anchor-id="moving-code-and-data-between-your-computer-and-the-cluster">Moving code and data between your computer and the cluster</h3>
+<section id="code" class="level4">
+<h4 class="anchored" data-anchor-id="code">Code</h4>
+<p>The best way to move code between your local computer and the cluster is via GitHub. For example, to get code from your local computer to the cluster, simply push your code from your local computer to GitHub, and then pull from GitHub to the cluster. This will make sure your code stays synchronized across these two computing environments.</p>
+</section>
+<section id="data" class="level4">
+<h4 class="anchored" data-anchor-id="data">Data</h4>
+<p>The easiest way to move data between your local computer and the cluster is also GitHub. However, this approach works only if the data files you are working with are under 100 MB, which is GitHub’s limit. Otherwise, the best approach is via <code>rsync</code>, a Linux utility for file synchronization.</p>
+</section>
+</section>
+<section id="submitting-batch-jobs" class="level3">
+<h3 class="anchored" data-anchor-id="submitting-batch-jobs">Submitting batch jobs</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">SGE</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">SLURM</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>To submit a batch job, you must first write a submission script. Here, I will illustrate how one would write a submission script for an array job. Suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>submit_jobs.sh</code>, which specifies the resource requests as well as the code to run for each array task (the array task is specified by the environment variable <code>SGE_TASK_ID</code>).</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>submit_jobs.sh</strong></pre>
@@ -463,51 +545,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -N my_simulation             # Specify job name</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -j y                         # Merge standard output and standard error</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_rt=01:00:00             # Request 1 hour of runtime</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l h_vmem=1G                 # Request 1 GB of virtual memory per slot</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -l m_mem_free=1G             # Request 1 GB of virtual memory per slot</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#$ -t 1-100                     # Specify the task range for the array job</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># load requisite modules</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load R/4.3.1</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameter setting for this task via scheduler's $SGE_TASK_ID</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameter for this task via scheduler's $SGE_TASK_ID</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="va">parameter_value</span><span class="op">=</span><span class="va">$SGE_TASK_ID</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the simulation with the specific parameter value</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> run_sim.R <span class="va">$param</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> run_sim.R <span class="va">$parameter_value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Finally, we would submit this array job to the scheduler (in this case, SGE) via</p>
+<p>Finally, you would submit this array job to the scheduler via</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qsub</span> submit_jobs.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>To submit a batch job, you must first write a submission script. Here, I will illustrate how one would write a submission script for an array job. Suppose you would like to carry out a numerical simulation that compares 100 different parameter values (say 1, 2, …, 100). To do so, you would first create an R script called <code>run_sim.R</code>, which takes as a command-line argument the parameter value and writes the results of the corresponding simulation to file. Then, you would create a bash script called <code>submit_jobs.sh</code>, which specifies the resource requests as well as the code to run for each array task (the array task is specified by the environment variable <code>SLURM_ARRAY_TASK_ID</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>submit_jobs.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=my_simulation    # Specify job name</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=01:00:00             # Request 1 hour of runtime</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=1G                    # Request 1 GB of memory</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --array=1-100               # Specify the task range for the array job</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># load requisite modules</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load R/4.3.1</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate parameter for this task via scheduler's $SLURM_ARRAY_TASK_ID</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="va">parameter_value</span><span class="op">=</span><span class="va">$SLURM_ARRAY_TASK_ID</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the simulation with the specific parameter value</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> run_sim.R <span class="va">$parameter_value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, you would submit this array job to the scheduler via</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> submit_jobs.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="monitoring-the-progress-of-batch-jobs" class="level2" data-number="11.6">
-<h2 data-number="11.6" class="anchored" data-anchor-id="monitoring-the-progress-of-batch-jobs"><span class="header-section-number">11.6</span> Monitoring the progress of batch jobs</h2>
+<section id="monitoring-the-progress-of-batch-jobs" class="level3">
+<h3 class="anchored" data-anchor-id="monitoring-the-progress-of-batch-jobs">Monitoring the progress of batch jobs</h3>
 <p>You can monitor the progress of your batch jobs (or tasks, for array jobs) by viewing the status of queued or running jobs (via <code>qstat</code> on SGE or <code>squeue</code> on SLURM). These commands will show you how many of these jobs are still waiting in the queue and how many are running. If you wish to monitor the progress of each job (or task) individually, you can use its output file. These output files will usually be named something like <code>&lt;job_name&gt;.o&lt;job_id&gt;.&lt;task_id&gt;</code>, and will appear by default in the same directory as your submission script. If your code (in this case, <code>run_sim.R</code>) prints statements about its progress, then these will show up in the output file corresponding to each job and task.</p>
 </section>
-<section id="debugging-errors-in-batch-jobs" class="level2" data-number="11.7">
-<h2 data-number="11.7" class="anchored" data-anchor-id="debugging-errors-in-batch-jobs"><span class="header-section-number">11.7</span> Debugging errors in batch jobs</h2>
+<section id="debugging-errors-in-batch-jobs" class="level3">
+<h3 class="anchored" data-anchor-id="debugging-errors-in-batch-jobs">Debugging errors in batch jobs</h3>
 <p>Errors in your batch jobs will typically be due to one of two reasons: a bug in your code or an inadequate resource request. The former issue is always present, but the latter is HPC-specific.</p>
-<section id="bug-in-your-code" class="level3" data-number="11.7.1">
-<h3 data-number="11.7.1" class="anchored" data-anchor-id="bug-in-your-code"><span class="header-section-number">11.7.1</span> Bug in your code</h3>
+<section id="bug-in-your-code" class="level4">
+<h4 class="anchored" data-anchor-id="bug-in-your-code">Bug in your code</h4>
 <p>Usually, you would develop and debug your code locally prior to moving it to the cluster. This strategy should help reduce the number of bugs you encounter when running code on the cluster. If you do encounter a bug in your code on the cluster, then you can make note of the job and/or task id and try to reproduce and fix the bug in an interactive session on the cluster. Alternatively, you can go back to your local machine to fix the bug.</p>
 </section>
-<section id="inadequate-resource-request" class="level3" data-number="11.7.2">
-<h3 data-number="11.7.2" class="anchored" data-anchor-id="inadequate-resource-request"><span class="header-section-number">11.7.2</span> Inadequate resource request</h3>
-<p>Suppose you requested an hour for a given batch job (or task) and that job actually needed two hours. In this case, the scheduler unceremoniously kills that job after one hour and prints an error message in the corresponding log file. In addition to inspecting the log file, you can get a better sense for what happened with a killed job via the job accounting feature of the scheduler. For example, on SGE you can type</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qacct</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span> -t <span class="op">&lt;</span>task_id<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>to get a wealth of information about the given job/task. To deal with insufficient memory or time requests, simply restart the job with an increased memory or time request. You may need to run some pilot jobs to get a better sense for how much memory or time your code will need.</p>
-</section>
-</section>
-<section id="hpc-workflow" class="level2" data-number="11.8">
-<h2 data-number="11.8" class="anchored" data-anchor-id="hpc-workflow"><span class="header-section-number">11.8</span> HPC workflow</h2>
-<p>Typically, the HPC workflow involves the following steps:</p>
-<ol type="1">
-<li><strong>Develop and debug code locally.</strong> Write an R script (e.g.&nbsp;<code>run_sim.R</code>) that carries out one of your parallel computations. Test it locally on individual parameter values by running <code>Rscript run_sim.R &lt;param-value&gt;</code> from the Terminal. Write a submission script (like <code>submit_jobs.sh</code>) that calls your R script. Write a script that collects the results from individual jobs into a single file. Commit these scripts using Git, and push to GitHub.</li>
-<li><strong>Run the code in parallel on the cluster.</strong> Get your code onto the cluster by pulling it from GitHub. Then, run your submission script. Monitor your jobs and troubleshoot any errors that arise.</li>
-<li><strong>Combine the results from individual jobs into a single file.</strong> Once the parallel jobs are complete, run your script to collect the results.</li>
-<li><strong>Get the results back onto your local machine.</strong> The easiest way to move the results back to your computer is to commit them and push them to GitHub, and then to pull them onto your computer. This strategy works if the results file is under 100 MB, which is GitHub’s limit. Otherwise, you can use <code>rsync</code>.</li>
-<li><strong>Explore the results on your local machine.</strong> Once the results are on your computer, you can explore them as usual.</li>
-</ol>
+<section id="inadequate-resource-request" class="level4">
+<h4 class="anchored" data-anchor-id="inadequate-resource-request">Inadequate resource request</h4>
+<p>Suppose you requested an hour for a given batch job (or task) and that job actually needed two hours. In this case, the scheduler unceremoniously kills that job after one hour and prints an error message in the corresponding log file. In addition to inspecting the log file, you can get a better sense for what happened with a killed job via the job accounting feature of the scheduler to get a wealth of information about the given job/task:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">SGE</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">SLURM</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qacct</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span> -t <span class="op">&lt;</span>task_id<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span>_<span class="op">&lt;</span>task_id<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>To deal with insufficient memory or time requests, simply restart the job with an increased memory or time request. You may need to run some pilot jobs to get a better sense for how much memory or time your code will need.</p>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
