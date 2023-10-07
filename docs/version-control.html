@@ -279,7 +279,13 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#debugging-tips" id="toc-debugging-tips" class="nav-link active" data-scroll-target="#debugging-tips"><span class="header-section-number">5.1</span> Debugging tips</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -302,8 +308,20 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 <p>Read Chapters 1 and 2 of <a href="https://git-scm.com/book/en/v2">Pro Git</a>.</p>
+<section id="debugging-tips" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="debugging-tips"><span class="header-section-number">5.1</span> Debugging tips</h2>
+<ul>
+<li>If the repository state becomes too messed up, then you can follow these steps:
+<ol type="1">
+<li>Move the files you have changed since the previous commit to a temporary directory.</li>
+<li>Delete the directory on your computer containing the messed up repository via <code>rm -rf &lt;directory-name&gt;</code>.</li>
+<li>Clone the repository again from GitHub.</li>
+<li>Copy the files you have changed since the previous commit from the temporary directory to the new repository directory.</li>
+</ol></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

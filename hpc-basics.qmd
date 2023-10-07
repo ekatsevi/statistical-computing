@@ -87,7 +87,7 @@ The scheduler may also impose limits on the amount of resources that can be requ
 There are several different schedulers in use by HPC clusters, two of the most common being Sun Grid Engine (SGE) and Simple Linux Utility for Resource Management (SLURM). These different schedulers have different syntax for tasks like submitting jobs, viewing the job queue, etc.
 
 | Task                   | SGE Command                         | SLURM Command              |
-|------------------|-------------------------------|-----------------------|
+|------------------------|-------------------------------------|----------------------------|
 | Submit interactive job | `qrsh`                              | `srun`                     |
 | Submit batch job       | `qsub <script>`                     | `sbatch <script>`          |
 | Resource request flags | `-l h_rt=01:00:00 -l m_mem_free=1G` | `--time=01:00:00 --mem=1G` |

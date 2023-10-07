@@ -264,5 +264,12 @@
     "title": "Appendix B — HPC setup",
     "section": "B.1 Set up password-less access to HPC",
     "text": "B.1 Set up password-less access to HPC\nFirst, generate an SSH key on your local machine. Then, copy your SSH public key from your local machine to the HPC by typing\nssh-copy-id &lt;username&gt;@&lt;hpc-address&gt;\nat the Terminal of your local machine and then enter your login credentials. At this point, you should be able to SSH into your HPC without entering your password; try it out by typing\nssh &lt;username&gt;@&lt;hpc-address&gt;"
+  },
+  {
+    "objectID": "version-control.html#debugging-tips",
+    "href": "version-control.html#debugging-tips",
+    "title": "5  Version control",
+    "section": "5.1 Debugging tips",
+    "text": "5.1 Debugging tips\n\nIf the repository state becomes too messed up, then you can follow these steps:\n\nMove the files you have changed since the previous commit to a temporary directory.\nDelete the directory on your computer containing the messed up repository via rm -rf &lt;directory-name&gt;.\nClone the repository again from GitHub.\nCopy the files you have changed since the previous commit from the temporary directory to the new repository directory."
   }
 ]

@@ -1,3 +1,11 @@
 # Version control
 
 Read Chapters 1 and 2 of [Pro Git](https://git-scm.com/book/en/v2).
+
+## Debugging tips
+
+- If the repository state becomes too messed up, then you can follow these steps:
+  1. Move the files you have changed since the previous commit to a temporary directory.
+  2. Delete the directory on your computer containing the messed up repository via `rm -rf <directory-name>`.
+  3. Clone the repository again from GitHub.
+  4. Copy the files you have changed since the previous commit from the temporary directory to the new repository directory.
