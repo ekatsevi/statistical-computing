@@ -255,8 +255,8 @@
     "objectID": "local-setup.html#sec-ssh-keygen",
     "href": "local-setup.html#sec-ssh-keygen",
     "title": "Appendix A — Local setup",
-    "section": "A.5 Generate an SSH key",
-    "text": "A.5 Generate an SSH key\nCheck whether you already have an SSH key by typing ls ~/.ssh at the command line and seeing whether are files named id_ed25519 and id_ed25519.pub. If not, generate an SSH key by typing\nssh-keygen -t ed25519 -C \"your_email@example.com\" \nat the command line. Press enter when prompted with Enter file in which to save the key to choose the default, and then type a passphrase when prompted with Enter passphrase (empty for no passphrase). Alternately, do not type a passphrase by simply pressing enter twice.\nIf you are on MacOS, create a file called config in the directory ~/.ssh with the contents\nHost *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/id_ed25519\nThe purpose of this step is to have the MacOS keychain store your SSH key passphrase."
+    "section": "A.6 Generate an SSH key",
+    "text": "A.6 Generate an SSH key\nCheck whether you already have an SSH key by typing ls ~/.ssh at the command line and seeing whether are files named id_ed25519 and id_ed25519.pub. If not, generate an SSH key by typing\nssh-keygen -t ed25519 -C \"your_email@example.com\" \nat the command line. Press enter when prompted with Enter file in which to save the key to choose the default, and then type a passphrase when prompted with Enter passphrase (empty for no passphrase). Alternately, do not type a passphrase by simply pressing enter twice.\nIf you are on MacOS, create a file called config in the directory ~/.ssh with the contents\nHost *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/id_ed25519\nThe purpose of this step is to have the MacOS keychain store your SSH key passphrase."
   },
   {
     "objectID": "hpc-setup.html#sec-passwordless-hpc-access",
@@ -271,5 +271,12 @@
     "title": "5  Version control",
     "section": "5.1 Debugging tips",
     "text": "5.1 Debugging tips\n\nIf the repository state becomes too messed up, then you can follow these steps:\n\nMove the files you have changed since the previous commit to a temporary directory.\nDelete the directory on your computer containing the messed up repository via rm -rf &lt;directory-name&gt;.\nClone the repository again from GitHub.\nCopy the files you have changed since the previous commit from the temporary directory to the new repository directory."
+  },
+  {
+    "objectID": "local-setup.html#setting-up-your-shell",
+    "href": "local-setup.html#setting-up-your-shell",
+    "title": "Appendix A — Local setup",
+    "section": "A.5 Setting up your shell",
+    "text": "A.5 Setting up your shell\nA modern shell choice is Z shell (Zsh), the default shell on MacOS. If Zsh is not your default shell, change your default to Zsh via chsh -s $(which zsh). Close your shell and open a new one. Next, set up Oh My Zsh for shell customization. To this end, paste the following command in your shell:\nsh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\"\nAfter that, navigate to ~/.oh-my-zsh/custom in your shell. You can place custom scripts here that will be run upon shell startup, as well as custom Oh My Zsh themes. I recommend keeping ~/.oh-my-zsh/custom under version control. To decouple the ~/.oh-my-zsh/custom repository from the enclosing ~/.oh-my-zsh repository, I recommend running\ngit rm --cached -r custom/                                       \ngit commit -m \"Stop tracking files in custom/\"\nFor the Katsevich Lab members, I recommend removing the default contents of ~/.oh-my-zsh/custom and replacing them with those at https://github.com/Katsevich-Lab/custom-shell-scripts/ via\ncd ~/.oh-my-zsh/custom\nrm -r *\ngit clone git@github.com:Katsevich-Lab/custom-shell-scripts.git .\nNote that this repository contains a modified version of the steeef theme. To activate this theme, change the line ZSH_THEME=robbyrussell to ZSH_THEME=steeef in the file ~/.zshrc."
   }
 ]

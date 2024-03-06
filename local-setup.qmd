@@ -8,6 +8,25 @@
 
 ## Installing WSL2 for Windows users
 
+## Setting up your shell
+
+A modern shell choice is Z shell (Zsh), the default shell on MacOS. If Zsh is not your default shell, change your default to Zsh via `chsh -s $(which zsh)`. Close your shell and open a new one. Next, set up [Oh My Zsh](https://ohmyz.sh/) for shell customization. To this end, paste the following command in your shell:
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+After that, navigate to `~/.oh-my-zsh/custom` in your shell. You can place custom scripts here that will be run upon shell startup, as well as custom Oh My Zsh themes. I recommend keeping `~/.oh-my-zsh/custom` under version control. To decouple the `~/.oh-my-zsh/custom` repository from the enclosing `~/.oh-my-zsh` repository, I recommend running
+```bash
+git rm --cached -r custom/                                       
+git commit -m "Stop tracking files in custom/"
+```
+For the Katsevich Lab members, I recommend removing the default contents of `~/.oh-my-zsh/custom` and replacing them with those at [https://github.com/Katsevich-Lab/custom-shell-scripts/](https://github.com/Katsevich-Lab/custom-shell-scripts) via 
+```bash
+cd ~/.oh-my-zsh/custom
+rm -r *
+git clone git@github.com:Katsevich-Lab/custom-shell-scripts.git .
+```
+Note that this repository contains a [modified version of the steeef theme](https://github.com/Katsevich-Lab/custom-shell-scripts/blob/main/themes/steeef.zsh-theme). To activate this theme, change the line `ZSH_THEME=robbyrussell` to `ZSH_THEME=steeef` in the file `~/.zshrc`.
+
 ## Generate an SSH key {#sec-ssh-keygen}
 
 Check whether you already have an SSH key by typing `ls ~/.ssh` at the command line and seeing whether are files named `id_ed25519` and `id_ed25519.pub`. If not, generate an SSH key by typing

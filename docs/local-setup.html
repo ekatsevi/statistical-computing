@@ -321,7 +321,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#installing-rstudio" id="toc-installing-rstudio" class="nav-link" data-scroll-target="#installing-rstudio"><span class="header-section-number">A.2</span> Installing RStudio</a></li>
   <li><a href="#installing-visual-studio-code" id="toc-installing-visual-studio-code" class="nav-link" data-scroll-target="#installing-visual-studio-code"><span class="header-section-number">A.3</span> Installing Visual Studio Code</a></li>
   <li><a href="#installing-wsl2-for-windows-users" id="toc-installing-wsl2-for-windows-users" class="nav-link" data-scroll-target="#installing-wsl2-for-windows-users"><span class="header-section-number">A.4</span> Installing WSL2 for Windows users</a></li>
-  <li><a href="#sec-ssh-keygen" id="toc-sec-ssh-keygen" class="nav-link" data-scroll-target="#sec-ssh-keygen"><span class="header-section-number">A.5</span> Generate an SSH key</a></li>
+  <li><a href="#setting-up-your-shell" id="toc-setting-up-your-shell" class="nav-link" data-scroll-target="#setting-up-your-shell"><span class="header-section-number">A.5</span> Setting up your shell</a></li>
+  <li><a href="#sec-ssh-keygen" id="toc-sec-ssh-keygen" class="nav-link" data-scroll-target="#sec-ssh-keygen"><span class="header-section-number">A.6</span> Generate an SSH key</a></li>
   </ul>
 </nav>
     </div>
@@ -357,16 +358,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-wsl2-for-windows-users" class="level2" data-number="A.4">
 <h2 data-number="A.4" class="anchored" data-anchor-id="installing-wsl2-for-windows-users"><span class="header-section-number">A.4</span> Installing WSL2 for Windows users</h2>
 </section>
-<section id="sec-ssh-keygen" class="level2" data-number="A.5">
-<h2 data-number="A.5" class="anchored" data-anchor-id="sec-ssh-keygen"><span class="header-section-number">A.5</span> Generate an SSH key</h2>
+<section id="setting-up-your-shell" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="setting-up-your-shell"><span class="header-section-number">A.5</span> Setting up your shell</h2>
+<p>A modern shell choice is Z shell (Zsh), the default shell on MacOS. If Zsh is not your default shell, change your default to Zsh via <code>chsh -s $(which zsh)</code>. Close your shell and open a new one. Next, set up <a href="https://ohmyz.sh/">Oh My Zsh</a> for shell customization. To this end, paste the following command in your shell:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> <span class="at">-c</span> <span class="st">"</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After that, navigate to <code>~/.oh-my-zsh/custom</code> in your shell. You can place custom scripts here that will be run upon shell startup, as well as custom Oh My Zsh themes. I recommend keeping <code>~/.oh-my-zsh/custom</code> under version control. To decouple the <code>~/.oh-my-zsh/custom</code> repository from the enclosing <code>~/.oh-my-zsh</code> repository, I recommend running</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> rm <span class="at">--cached</span> <span class="at">-r</span> custom/                                       </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Stop tracking files in custom/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For the Katsevich Lab members, I recommend removing the default contents of <code>~/.oh-my-zsh/custom</code> and replacing them with those at <a href="https://github.com/Katsevich-Lab/custom-shell-scripts">https://github.com/Katsevich-Lab/custom-shell-scripts/</a> via</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.oh-my-zsh/custom</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> <span class="pp">*</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:Katsevich-Lab/custom-shell-scripts.git .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that this repository contains a <a href="https://github.com/Katsevich-Lab/custom-shell-scripts/blob/main/themes/steeef.zsh-theme">modified version of the steeef theme</a>. To activate this theme, change the line <code>ZSH_THEME=robbyrussell</code> to <code>ZSH_THEME=steeef</code> in the file <code>~/.zshrc</code>.</p>
+</section>
+<section id="sec-ssh-keygen" class="level2" data-number="A.6">
+<h2 data-number="A.6" class="anchored" data-anchor-id="sec-ssh-keygen"><span class="header-section-number">A.6</span> Generate an SSH key</h2>
 <p>Check whether you already have an SSH key by typing <code>ls ~/.ssh</code> at the command line and seeing whether are files named <code>id_ed25519</code> and <code>id_ed25519.pub</code>. If not, generate an SSH key by typing</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>at the command line. Press enter when prompted with Enter file in which to save the key to choose the default, and then type a passphrase when prompted with <code>Enter passphrase (empty for no passphrase)</code>. Alternately, do not type a passphrase by simply pressing enter twice.</p>
 <p>If you are on MacOS, create a file called <code>config</code> in the directory <code>~/.ssh</code> with the contents</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Host</span> <span class="pp">*</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">AddKeysToAgent</span> yes</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">UseKeychain</span> yes</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Host</span> <span class="pp">*</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">AddKeysToAgent</span> yes</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">UseKeychain</span> yes</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">IdentityFile</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The purpose of this step is to have the MacOS keychain store your SSH key passphrase.</p>
 
 
